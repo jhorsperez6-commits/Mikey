@@ -3,52 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serve Pene Hub - Sistema de 1000 Keys</title>
+    <title>Serve Pene Hub - Asignación de Key</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
         body { background-color: #0b0c10; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
         .card { background-color: #121316; border: 2px solid #00bfff; padding: 30px 20px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.8); }
         h1 { color: #00bfff; font-size: 22px; margin-bottom: 5px; font-weight: bold; }
         .subtitle { color: #00ff88; font-size: 13px; font-weight: bold; margin-bottom: 20px; }
-        .box-input { margin-bottom: 15px; text-align: left; }
-        label { font-size: 11px; color: #aaa; display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; background: #1a1c23; border: 1px solid #00bfff; color: #fff; border-radius: 8px; font-size: 16px; text-align: center; font-weight: bold; }
-        .btn { background: #00bfff; color: #000; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; }
+        .user-id-box { font-size: 14px; color: #00bfff; background: #1a1c23; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #333; }
+        .key-box { background-color: #1a1c23; border: 1px dashed #00bfff; padding: 18px; border-radius: 10px; margin-bottom: 20px; }
+        .key-title { font-size: 12px; color: #aaa; margin-bottom: 10px; }
+        .key-text { color: #00ff88; font-family: monospace; font-size: 20px; font-weight: bold; word-break: break-all; background: #0b0c10; padding: 12px; border-radius: 6px; border: 1px solid #333; }
+        .btn { background: #00ff88; color: #000; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
         .btn:active { transform: scale(0.98); }
-        .key-box { background-color: #1a1c23; border: 1px dashed #00ff88; padding: 15px; border-radius: 10px; margin-top: 20px; display: none; }
-        .key-text { color: #00ff88; font-family: monospace; font-size: 16px; font-weight: bold; word-break: break-all; background: #0b0c10; padding: 10px; border-radius: 6px; border: 1px solid #333; margin-top: 8px; }
-        .error-text { color: #ff4d4d; font-size: 12px; margin-top: 15px; font-weight: bold; display: none; }
-        .info { font-size: 11px; color: #8c91a0; margin-top: 20px; line-height: 1.4; }
+        .info { font-size: 11px; color: #8c91a0; margin-top: 18px; line-height: 1.4; }
     </style>
 </head>
 <body>
 
     <div class="card">
         <h1>SERVE PENE HUB</h1>
-        <div class="subtitle">SISTEMA OFICIAL DE 1000 KEYS</div>
+        <div class="subtitle">¡Anuncios Completados con Éxito!</div>
 
-        <div class="box-input">
-            <label>Ingresa tu número asignado (1 al 1000):</label>
-            <input type="number" id="userNumber" placeholder="Ej. 1" min="1" max="1000">
+        <!-- MUESTRA EL NÚMERO ASIGNADO DENTRO DE LOS 1000 USUARIOS -->
+        <div class="user-id-box">
+            Tu Número Asignado: <span id="numUsuario" style="color: #00ff88; font-weight: bold;">#---</span> / 1000
         </div>
 
-        <button class="btn" onclick="verificarYEntregarKey()">OBTENER MI KEY</button>
-
-        <div class="error-text" id="errorMsg">Ese no es tu número o es inválido.</div>
-
-        <div class="key-box" id="resultBox">
-            <div style="font-size: 11px; color: #aaa;">Tu Key Única del Número Asignado:</div>
-            <div class="key-text" id="assignedKey">---</div>
-            <button class="btn" style="background: #00ff88; color: #000; margin-top: 12px;" onclick="copiarKey()">Copiar Key al Portapapeles</button>
+        <div class="key-box">
+            <div class="key-title">Tu Key Única del Sistema:</div>
+            <div class="key-text" id="assignedKey">Cargando...</div>
         </div>
+
+        <button class="btn" onclick="copiarKey()">Copiar Key al Portapapeles</button>
 
         <div class="info">
-            Escribe tu número para ver tu key asociada. Si intentas poner otro número, la página te marcará error.
+            Se te ha asignado un número único de las 1000 keys disponibles. Copia tu key y pégala dentro de tu ejecutor de Roblox.
         </div>
     </div>
 
     <script>
-        // BANCO DE LAS 1000 KEYS EXACTAS VINCULADAS DEL 1 AL 1000
+        // BANCO CON LAS 1000 KEYS DENTRO DEL CÓDIGO
         var keys1000 = {};
         var prefijos = ["SPH", "VIP", "GOD", "PRO", "LUA", "HUB", "ELITE", "X", "K", "Z"];
 
@@ -58,38 +53,18 @@
             keys1000[i] = pref + "-" + i + "-" + hash;
         }
 
-        function verificarYEntregarKey() {
-            var numInput = document.getElementById("userNumber").value.trim();
-            var errorDiv = document.getElementById("errorMsg");
-            var resultBox = document.getElementById("resultBox");
-            var keyDisplay = document.getElementById("assignedKey");
+        // ASIGNAR AUTOMÁTICAMENTE UN NÚMERO DEL 1 AL 1000 A ESTE NAVEGADOR
+        var miNumero = localStorage.getItem("sph_numero_asignado_v1");
 
-            errorDiv.style.display = "none";
-            resultBox.style.display = "none";
-
-            var num = parseInt(numInput);
-
-            if (!num || num < 1 || num > 1000) {
-                errorDiv.innerText = "Por favor escribe un número válido del 1 al 1000.";
-                errorDiv.style.display = "block";
-                return;
-            }
-
-            // Guardar o verificar el número propio en este celular
-            var miNumeroGuardado = localStorage.getItem("sph_mi_numero_propio");
-
-            if (!miNumeroGuardado) {
-                localStorage.setItem("sph_mi_numero_propio", num);
-            } else if (parseInt(miNumeroGuardado) !== num) {
-                errorDiv.innerText = "¡Error! Tu número asignado en este dispositivo es el " + miNumeroGuardado + ".";
-                errorDiv.style.display = "block";
-                return;
-            }
-
-            // Entrega la key de las 1000 cargadas de una vez
-            keyDisplay.innerText = keys1000[num];
-            resultBox.style.display = "block";
+        if (!miNumero) {
+            // Si entra por primera vez, le asigna un número aleatorio entre el 1 y el 1000
+            miNumero = Math.floor(Math.random() * 1000) + 1;
+            localStorage.setItem("sph_numero_asignado_v1", miNumero);
         }
+
+        // MOSTRAR EN PANTALLA SU NÚMERO Y SU KEY
+        document.getElementById("numUsuario").innerText = "#" + miNumero;
+        document.getElementById("assignedKey").innerText = keys1000[miNumero];
 
         function copiarKey() {
             var texto = document.getElementById("assignedKey").innerText;
@@ -102,5 +77,6 @@
             }
         }
     </script>
+
 </body>
 </html>
