@@ -3,116 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serve Pene Hub - Asignación de Key</title>
+    <title>Serve Pene Hub - Key System</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
         body {
-            background: linear-gradient(160deg, #0a0a12 0%, #12121f 100%);
+            background: #07070c;
             color: #ffffff;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
         }
+
         .card {
-            background: rgba(18, 18, 30, 0.95);
-            border: 1px solid rgba(0, 191, 255, 0.35);
-            padding: 36px 24px;
-            border-radius: 18px;
+            background: #0f0f17;
+            border: 1px solid #1e2a3a;
+            border-radius: 20px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            padding: 40px 28px;
             text-align: center;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
         }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #00bfff, #00ff88);
+        }
+
         h1 {
+            font-size: 26px;
+            font-weight: 700;
             color: #00bfff;
-            font-size: 23px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             letter-spacing: 1px;
         }
+
         .subtitle {
-            color: #00ff88;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 22px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .user-id-box {
+            color: #7a8a9a;
             font-size: 13px;
+            margin-bottom: 32px;
+        }
+
+        /* Pantalla inicial */
+        #pantallaInicio {
+            display: block;
+        }
+
+        .btn-generar {
+            background: linear-gradient(135deg, #00bfff, #00e5ff);
+            color: #000;
+            border: none;
+            padding: 16px 24px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-generar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 191, 255, 0.35);
+        }
+
+        .btn-generar:active {
+            transform: translateY(0);
+        }
+
+        /* Animación de creación */
+        #pantallaCargando {
+            display: none;
+            padding: 30px 0;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 3px solid #1e2a3a;
+            border-top: 3px solid #00bfff;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .texto-cargando {
             color: #00bfff;
-            background: #1a1c23;
-            padding: 11px;
-            border-radius: 9px;
-            margin-bottom: 14px;
-            border: 1px solid #2a2d3a;
+            font-size: 15px;
+            font-weight: 600;
         }
-        .timer-box {
-            font-size: 12px;
-            color: #ffcc00;
-            font-weight: bold;
+
+        /* Pantalla de resultado */
+        #pantallaResultado {
+            display: none;
+        }
+
+        .numero-box {
+            background: #151520;
+            border: 1px solid #2a3a4a;
+            border-radius: 12px;
+            padding: 14px;
             margin-bottom: 16px;
-            background: #181500;
-            border: 1px solid rgba(255, 204, 0, 0.4);
-            padding: 9px;
-            border-radius: 7px;
+            font-size: 14px;
+            color: #a0b0c0;
         }
-        .key-box {
-            background: #1a1c23;
-            border: 1px dashed rgba(0, 191, 255, 0.5);
-            padding: 18px;
+
+        .numero-box span {
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .timer-box {
+            background: #1a1500;
+            border: 1px solid #3a3000;
+            color: #ffcc00;
             border-radius: 10px;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
             margin-bottom: 20px;
         }
-        .key-title {
+
+        .key-box {
+            background: #0d0d14;
+            border: 1px dashed #00bfff;
+            border-radius: 12px;
+            padding: 20px 16px;
+            margin-bottom: 20px;
+        }
+
+        .key-label {
             font-size: 12px;
-            color: #aaa;
+            color: #7a8a9a;
             margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
         .key-text {
-            color: #00ff88;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 700;
+            color: #00ff88;
             word-break: break-all;
-            background: #0b0c10;
+            background: #07070c;
             padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #333;
+            border-radius: 8px;
         }
-        .btn {
+
+        .btn-copiar {
             background: #00ff88;
             color: #000;
             border: none;
-            padding: 14px;
+            padding: 15px;
             width: 100%;
-            border-radius: 8px;
-            font-weight: bold;
+            border-radius: 12px;
             font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            transition: 0.15s;
+            transition: 0.2s;
         }
-        .btn:active {
-            transform: scale(0.98);
+
+        .btn-copiar:hover {
+            background: #00e676;
         }
-        .warning-box {
+
+        .aviso {
+            margin-top: 20px;
             font-size: 11px;
-            color: #ff4d4d;
-            background: rgba(255, 77, 77, 0.1);
-            border: 1px solid #ff4d4d;
-            padding: 10px;
-            border-radius: 6px;
-            margin-top: 15px;
+            color: #ff6b6b;
+            background: rgba(255, 80, 80, 0.08);
+            border: 1px solid rgba(255, 80, 80, 0.25);
+            border-radius: 8px;
+            padding: 12px;
             text-align: left;
-            line-height: 1.4;
+            line-height: 1.5;
         }
+
         .info {
-            font-size: 11px;
-            color: #8c91a0;
-            margin-top: 15px;
-            line-height: 1.4;
+            margin-top: 16px;
+            font-size: 12px;
+            color: #6a7a8a;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -120,105 +214,167 @@
 
     <div class="card">
         <h1>SERVE PENE HUB</h1>
-        <div class="subtitle">¡Anuncios Completados con Éxito!</div>
+        <div class="subtitle">Sistema Oficial de Keys</div>
 
-        <div class="user-id-box">
-            Tu Número Asignado: <span id="numUsuario" style="color: #00ff88; font-weight: bold;">#---</span> / 10000
+        <!-- PANTALLA 1: Botón Generar -->
+        <div id="pantallaInicio">
+            <button class="btn-generar" onclick="iniciarGeneracion()">
+                🔑 Generar Key
+            </button>
+            <div class="info" style="margin-top: 24px;">
+                Toca el botón para generar tu key de acceso de 10 horas.
+            </div>
         </div>
 
-        <div class="timer-box" id="timerDisplay">
-            Tiempo de validez: 10h 00m 00s
+        <!-- PANTALLA 2: Animación -->
+        <div id="pantallaCargando">
+            <div class="loader"></div>
+            <div class="texto-cargando">Creando tu Key...</div>
         </div>
 
-        <div class="key-box">
-            <div class="key-title">Tu Key Única del Sistema:</div>
-            <div class="key-text" id="assignedKey">Cargando...</div>
-        </div>
+        <!-- PANTALLA 3: Resultado -->
+        <div id="pantallaResultado">
+            <div class="numero-box">
+                Tu número de serie: <span id="numUsuario">#---</span> / 10000
+            </div>
 
-        <button class="btn" onclick="copiarKey()">Copiar Key al Portapapeles</button>
+            <div class="timer-box" id="timerDisplay">
+                Tiempo restante: 10h 00m 00s
+            </div>
 
-        <div class="warning-box">
-            ⚠️ <b>Aviso de Seguridad:</b> Esta Key es de <b>uso único</b> en el ejecutor de Roblox y expira automáticamente tras 10 horas.
-        </div>
+            <div class="key-box">
+                <div class="key-label">Tu Key Única</div>
+                <div class="key-text" id="assignedKey">------</div>
+            </div>
 
-        <div class="info">
-            Copia esta Key y pégala dentro de tu ejecutor de Roblox para activar el Hub.
+            <button class="btn-copiar" onclick="copiarKey()">
+                Copiar Key
+            </button>
+
+            <div class="aviso">
+                ⚠️ Esta key es de uso único y expira automáticamente después de 10 horas.
+            </div>
+
+            <div class="info">
+                Copia la key y pégala en tu ejecutor de Roblox.
+            </div>
         </div>
     </div>
 
     <script>
-        // ============== GENERADOR DE KEYS (1 a 10000) ==============
-        // Esta misma función la tienes que poner también en el script de Delta
+        // ================== GENERADOR DE KEY ==================
         function generarKey(numero) {
             const prefijos = ["SPH", "VIP", "GOD", "PRO", "LUA", "HUB", "ELITE", "X", "K", "Z"];
             const pref = prefijos[numero % prefijos.length];
 
-            // Hash simple pero determinístico (siempre sale igual para el mismo número)
             let hash = 0;
             const texto = "SPH_SECRET_2026_" + numero + "_SERVEPENE";
             for (let i = 0; i < texto.length; i++) {
                 hash = ((hash << 5) - hash) + texto.charCodeAt(i);
-                hash = hash & hash; // Convertir a 32bit
+                hash = hash & hash;
             }
             const hashHex = Math.abs(hash).toString(16).toUpperCase().padStart(6, "0").slice(0, 6);
 
             return pref + "-" + numero + "-" + hashHex;
         }
 
-        // ============== LÓGICA DE ASIGNACIÓN ==============
-        const DIEZ_HORAS_MS = 10 * 60 * 60 * 1000;
+        // ================== LÓGICA PRINCIPAL ==================
+        const DIEZ_HORAS = 10 * 60 * 60 * 1000;
 
-        let miNumero = localStorage.getItem("sph_numero_v3");
-        let tiempoCreacion = localStorage.getItem("sph_timestamp_v3");
-        const ahora = Date.now();
+        function obtenerNumeroSerie() {
+            // Intentamos hacer el número secuencial por dispositivo
+            let contador = localStorage.getItem("sph_contador_serie");
+            if (!contador) {
+                contador = 1;
+            } else {
+                contador = parseInt(contador) + 1;
+            }
 
-        // Si no tiene key o ya pasaron las 10 horas → generar nueva
-        if (!miNumero || !tiempoCreacion || (ahora - parseInt(tiempoCreacion)) >= DIEZ_HORAS_MS) {
-            miNumero = Math.floor(Math.random() * 10000) + 1; // 1 a 10000
-            tiempoCreacion = ahora;
-            localStorage.setItem("sph_numero_v3", miNumero);
-            localStorage.setItem("sph_timestamp_v3", tiempoCreacion);
+            // Límite de 10000
+            if (contador > 10000) contador = 1;
+
+            localStorage.setItem("sph_contador_serie", contador);
+            return contador;
         }
 
-        // Mostrar datos
-        document.getElementById("numUsuario").innerText = "#" + miNumero;
-        document.getElementById("assignedKey").innerText = generarKey(parseInt(miNumero));
+        function iniciarGeneracion() {
+            // Ocultar botón
+            document.getElementById("pantallaInicio").style.display = "none";
+            document.getElementById("pantallaCargando").style.display = "block";
 
-        // Contador en tiempo real
-        function actualizarContador() {
-            const actual = Date.now();
-            const restante = DIEZ_HORAS_MS - (actual - parseInt(tiempoCreacion));
+            // Simular creación (animación)
+            setTimeout(() => {
+                asignarKey();
+            }, 2200); // 2.2 segundos de animación
+        }
+
+        function asignarKey() {
+            const ahora = Date.now();
+            let numero = localStorage.getItem("sph_numero_actual");
+            let timestamp = localStorage.getItem("sph_timestamp_actual");
+
+            // Si no tiene key o ya expiró → crear nueva
+            if (!numero || !timestamp || (ahora - parseInt(timestamp)) >= DIEZ_HORAS) {
+                numero = obtenerNumeroSerie();
+                timestamp = ahora;
+                localStorage.setItem("sph_numero_actual", numero);
+                localStorage.setItem("sph_timestamp_actual", timestamp);
+            }
+
+            // Mostrar datos
+            document.getElementById("numUsuario").innerText = "#" + numero;
+            document.getElementById("assignedKey").innerText = generarKey(parseInt(numero));
+
+            // Cambiar pantallas
+            document.getElementById("pantallaCargando").style.display = "none";
+            document.getElementById("pantallaResultado").style.display = "block";
+
+            // Iniciar contador
+            actualizarTimer();
+            setInterval(actualizarTimer, 1000);
+        }
+
+        function actualizarTimer() {
+            const timestamp = parseInt(localStorage.getItem("sph_timestamp_actual"));
+            const restante = DIEZ_HORAS - (Date.now() - timestamp);
 
             if (restante <= 0) {
-                location.reload(); // Se acabó el tiempo → genera otra
+                location.reload();
                 return;
             }
 
-            const horas = Math.floor(restante / (1000 * 60 * 60));
-            const minutos = Math.floor((restante % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((restante % (1000 * 60)) / 1000);
+            const h = Math.floor(restante / 3600000);
+            const m = Math.floor((restante % 3600000) / 60000);
+            const s = Math.floor((restante % 60000) / 1000);
 
             document.getElementById("timerDisplay").innerText =
-                "Tiempo restante: " +
-                String(horas).padStart(2, "0") + "h " +
-                String(minutos).padStart(2, "0") + "m " +
-                String(segundos).padStart(2, "0") + "s";
+                `Tiempo restante: ${String(h).padStart(2, "0")}h ${String(m).padStart(2, "0")}m ${String(s).padStart(2, "0")}s`;
         }
 
-        setInterval(actualizarContador, 1000);
-        actualizarContador();
-
-        // Copiar key
         function copiarKey() {
-            const texto = document.getElementById("assignedKey").innerText;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(texto).then(() => {
-                    alert("¡Key copiada!");
-                });
-            } else {
-                alert("Tu key es:\n" + texto);
-            }
+            const key = document.getElementById("assignedKey").innerText;
+            navigator.clipboard.writeText(key).then(() => {
+                alert("Key copiada correctamente");
+            }).catch(() => {
+                alert("Tu key es:\n" + key);
+            });
         }
+
+        // Si ya tiene una key válida, mostrar directo el resultado
+        window.onload = function () {
+            const numero = localStorage.getItem("sph_numero_actual");
+            const timestamp = localStorage.getItem("sph_timestamp_actual");
+            const ahora = Date.now();
+
+            if (numero && timestamp && (ahora - parseInt(timestamp)) < DIEZ_HORAS) {
+                document.getElementById("pantallaInicio").style.display = "none";
+                document.getElementById("numUsuario").innerText = "#" + numero;
+                document.getElementById("assignedKey").innerText = generarKey(parseInt(numero));
+                document.getElementById("pantallaResultado").style.display = "block";
+                actualizarTimer();
+                setInterval(actualizarTimer, 1000);
+            }
+        };
     </script>
 </body>
 </html>
