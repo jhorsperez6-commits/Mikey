@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serve Pene Hub - Key</title>
+    <title>Alex@11 Hub - Key System</title>
     <style>
         * {
             margin: 0;
@@ -41,7 +41,7 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 22px;
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 700;
             color: #3ecfdf;
             font-family: Georgia, serif;
@@ -61,10 +61,7 @@
             margin-bottom: 28px;
         }
 
-        /* Pantalla inicial */
-        #inicio {
-            display: block;
-        }
+        #inicio { display: block; }
 
         .btn-generar {
             background: #3ecfdf;
@@ -77,9 +74,11 @@
             font-weight: 700;
             cursor: pointer;
             margin-top: 10px;
+            transition: 0.2s;
         }
 
-        /* Animación */
+        .btn-generar:hover { background: #32b0be; }
+
         #cargando {
             display: none;
             padding: 30px 0;
@@ -99,10 +98,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Resultado */
-        #resultado {
-            display: none;
-        }
+        #resultado { display: none; }
 
         .info-box {
             background: #111118;
@@ -141,7 +137,7 @@
 
         .key-box .key {
             font-family: 'Courier New', monospace;
-            font-size: 17px;
+            font-size: 16px;
             color: #3ecfdf;
             font-weight: 700;
             word-break: break-all;
@@ -173,108 +169,129 @@
 <body>
 
     <div class="card">
-        <div class="logo">SP</div>
-        <h1>Serve Pene Hub</h1>
-        <div class="subtitle">Sistema de Keys • 1500 disponibles</div>
+        <div class="logo">ALEX</div>
+        <h1>Alex@11 Hub</h1>
+        <div class="subtitle">Sistema de Keys • 300 Disponibles Hoy</div>
 
         <!-- PANTALLA INICIO -->
         <div id="inicio">
             <p style="color:#777790; font-size:14px; margin-bottom:24px; line-height:1.5;">
-                Toca el botón para generar tu key única de acceso.
+                Has completado los anuncios con éxito. Toca el botón para reclamar tu key única.
             </p>
-            <button class="btn-generar" onclick="generarKey()">Generar Key</button>
+            <button class="btn-generar" onclick="obtenerKeyUnica()">Obtener mi Key</button>
         </div>
 
         <!-- CARGANDO -->
         <div id="cargando">
             <div class="loader"></div>
-            <div style="color:#3ecfdf; font-size:15px;">Creando tu key...</div>
+            <div style="color:#3ecfdf; font-size:15px;">Asignando key única...</div>
         </div>
 
         <!-- RESULTADO -->
         <div id="resultado">
             <div class="info-box">
-                <div class="label">Número de serie</div>
-                <div class="value" id="numero">#--- / 1500</div>
+                <div class="label">Número de serie de hoy</div>
+                <div class="value" id="numero">#--- / 300</div>
             </div>
 
             <div class="info-box">
-                <div class="label">Tiempo restante</div>
+                <div class="label">Tiempo de duración</div>
                 <div class="value" id="timer">10h 00m 00s</div>
             </div>
 
             <div class="key-box">
-                <div class="label">Tu Key Única</div>
+                <div class="label">Tu Key Exclusiva</div>
                 <div class="key" id="keyText">------</div>
             </div>
 
             <button class="btn-copiar" onclick="copiarKey()">Copiar Key</button>
 
             <div class="aviso">
-                Esta key es de un solo uso y expira en 10 horas.<br>
-                Pégala en el ejecutor de Roblox.
+                Esta key es única para tu dispositivo, dura exactamente 10 horas y no puede ser usada por nadie más.
             </div>
         </div>
     </div>
 
     <script>
-        // ================== GENERADOR DE KEYS (1 a 1500) ==================
-        function crearKey(numero) {
-            const prefijos = ["SPH", "VIP", "GOD", "PRO", "LUA", "HUB", "ELITE", "X", "K", "Z"];
-            const pref = prefijos[numero % prefijos.length];
-
+        // Generador de estructura de Key segura basada en el número de serie diario
+        function generarCodigoKey(serialNum) {
             let hash = 0;
-            const texto = "SPH_SECRET_2026_" + numero + "_SERVEPENE";
-            for (let i = 0; i < texto.length; i++) {
-                hash = ((hash << 5) - hash) + texto.charCodeAt(i);
+            const textToHash = "ALEX11_SECRET_KEY_" + serialNum + "_SECURE";
+            for (let i = 0; i < textToHash.length; i++) {
+                hash = ((hash << 5) - hash) + textToHash.charCodeAt(i);
                 hash = hash & hash;
             }
-            const hashHex = Math.abs(hash).toString(16).toUpperCase().padStart(6, "0").slice(0, 6);
-            return pref + "-" + numero + "-" + hashHex;
+            const hexCode = Math.abs(hash).toString(16).toUpperCase().padStart(6, "0").slice(0, 6);
+            return "ALEX-" + serialNum + "-" + hexCode;
         }
 
         const DIEZ_HORAS = 10 * 60 * 60 * 1000;
 
-        function generarKey() {
+        function obtenerKeyUnica() {
             document.getElementById("inicio").style.display = "none";
             document.getElementById("cargando").style.display = "block";
 
             setTimeout(() => {
-                let numero = localStorage.getItem("sph_num_v4");
-                let timestamp = localStorage.getItem("sph_time_v4");
+                const hoyStr = new Date().toDateString(); // Identifica el día actual
+                let storedDate = localStorage.getItem("alex_date_v1");
+                let assignedSerial = localStorage.getItem("alex_serial_v1");
+                let timestamp = localStorage.getItem("alex_time_v1");
                 const ahora = Date.now();
 
-                // Si no tiene key o ya expiró → generar nueva
-                if (!numero || !timestamp || (ahora - parseInt(timestamp)) >= DIEZ_HORAS) {
-                    // Número secuencial limitado a 1500
-                    let contador = parseInt(localStorage.getItem("sph_contador_v4") || "0");
-                    contador = contador + 1;
-                    if (contador > 1500) contador = 1;
-
-                    numero = contador;
-                    timestamp = ahora;
-
-                    localStorage.setItem("sph_num_v4", numero);
-                    localStorage.setItem("sph_time_v4", timestamp);
-                    localStorage.setItem("sph_contador_v4", contador);
+                // Si cambió el día, reiniciamos el contador de las 300 keys globales del día
+                if (storedDate !== hoyStr) {
+                    localStorage.setItem("alex_date_v1", hoyStr);
+                    localStorage.setItem("alex_global_counter_v1", "0");
+                    localStorage.removeItem("alex_serial_v1");
+                    localStorage.removeItem("alex_time_v1");
+                    assignedSerial = null;
                 }
 
-                document.getElementById("numero").innerText = "#" + numero + " / 1500";
-                document.getElementById("keyText").innerText = crearKey(parseInt(numero));
+                // Si este dispositivo ya tiene una key activa y no han pasado las 10 horas, se le muestra la misma
+                if (assignedSerial && timestamp && (ahora - parseInt(timestamp)) < DIEZ_HORAS) {
+                    mostrarDatosKey(assignedSerial, timestamp);
+                    return;
+                }
 
-                document.getElementById("cargando").style.display = "none";
-                document.getElementById("resultado").style.display = "block";
+                // Si no tiene key asignada, tomamos el siguiente número secuencial de las 300 disponibles
+                let globalCounter = parseInt(localStorage.getItem("alex_global_counter_v1") || "0");
+                
+                if (globalCounter >= 300) {
+                    alert("¡Se han agotado las 300 keys de hoy! Vuelve mañana.");
+                    location.reload();
+                    return;
+                }
 
-                actualizarTimer();
-                setInterval(actualizarTimer, 1000);
-            }, 2000);
+                globalCounter++;
+                assignedSerial = globalCounter;
+                timestamp = ahora;
+
+                // Guardamos el registro en este dispositivo para bloquearlo
+                localStorage.setItem("alex_global_counter_v1", globalCounter);
+                localStorage.setItem("alex_serial_v1", assignedSerial);
+                localStorage.setItem("alex_time_v1", timestamp);
+
+                mostrarDatosKey(assignedSerial, timestamp);
+            }, 1500);
         }
 
-        function actualizarTimer() {
-            const timestamp = parseInt(localStorage.getItem("sph_time_v4"));
-            const restante = DIEZ_HORAS - (Date.now() - timestamp);
+        function mostrarDatosKey(serial, timestamp) {
+            document.getElementById("numero").innerText = "#" + serial + " / 300";
+            document.getElementById("keyText").innerText = generarCodigoKey(parseInt(serial));
+
+            document.getElementById("cargando").style.display = "none";
+            document.getElementById("resultado").style.display = "block";
+
+            actualizarTimer(parseInt(timestamp));
+            setInterval(() => actualizarTimer(parseInt(timestamp)), 1000);
+        }
+
+        function actualizarTimer(timestampOriginal) {
+            const restante = DIEZ_HORAS - (Date.now() - timestampOriginal);
 
             if (restante <= 0) {
+                localStorage.removeItem("alex_serial_v1");
+                localStorage.removeItem("alex_time_v1");
                 location.reload();
                 return;
             }
@@ -292,21 +309,20 @@
         function copiarKey() {
             const key = document.getElementById("keyText").innerText;
             navigator.clipboard.writeText(key).then(() => {
-                alert("Key copiada correctamente");
+                alert("¡Key copiada al portapapeles con éxito!");
             });
         }
 
-        // Si ya tiene una key válida, mostrar directo
+        // Al cargar la página, comprueba si ya generó su key y sigue vigente en el dispositivo
         window.onload = function () {
-            const numero = localStorage.getItem("sph_num_v4");
-            const timestamp = localStorage.getItem("sph_time_v4");
-            if (numero && timestamp && (Date.now() - parseInt(timestamp)) < DIEZ_HORAS) {
+            const hoyStr = new Date().toDateString();
+            let storedDate = localStorage.getItem("alex_date_v1");
+            let assignedSerial = localStorage.getItem("alex_serial_v1");
+            let timestamp = localStorage.getItem("alex_time_v1");
+
+            if (storedDate === hoyStr && assignedSerial && timestamp && (Date.now() - parseInt(timestamp)) < DIEZ_HORAS) {
                 document.getElementById("inicio").style.display = "none";
-                document.getElementById("numero").innerText = "#" + numero + " / 1500";
-                document.getElementById("keyText").innerText = crearKey(parseInt(numero));
-                document.getElementById("resultado").style.display = "block";
-                actualizarTimer();
-                setInterval(actualizarTimer, 1000);
+                mostrarDatosKey(assignedSerial, timestamp);
             }
         };
     </script>
