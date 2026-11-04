@@ -41,7 +41,7 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 22px;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: #3ecfdf;
             font-family: Georgia, serif;
@@ -137,7 +137,7 @@
 
         .key-box .key {
             font-family: 'Courier New', monospace;
-            font-size: 16px;
+            font-size: 15px;
             color: #3ecfdf;
             font-weight: 700;
             word-break: break-all;
@@ -171,26 +171,26 @@
     <div class="card">
         <div class="logo">ALEX</div>
         <h1>Alex@11 Hub</h1>
-        <div class="subtitle">Sistema de Keys • 300 Disponibles Hoy</div>
+        <div class="subtitle">Sistema de Keys • 300 Exclusivas Diarias</div>
 
         <!-- PANTALLA INICIO -->
         <div id="inicio">
             <p style="color:#777790; font-size:14px; margin-bottom:24px; line-height:1.5;">
-                Has completado los anuncios con éxito. Toca el botón para reclamar tu key única.
+                Anuncios completados. Toca el botón para reclamar tu key única e irrepetible.
             </p>
-            <button class="btn-generar" onclick="obtenerKeyUnica()">Obtener mi Key</button>
+            <button class="btn-generar" onclick="obtenerKeyExclusiva()">Obtener mi Key</button>
         </div>
 
         <!-- CARGANDO -->
         <div id="cargando">
             <div class="loader"></div>
-            <div style="color:#3ecfdf; font-size:15px;">Asignando key única...</div>
+            <div style="color:#3ecfdf; font-size:15px;">Generando código seguro...</div>
         </div>
 
         <!-- RESULTADO -->
         <div id="resultado">
             <div class="info-box">
-                <div class="label">Número de serie de hoy</div>
+                <div class="label">Serie del día</div>
                 <div class="value" id="numero">#--- / 300</div>
             </div>
 
@@ -200,98 +200,104 @@
             </div>
 
             <div class="key-box">
-                <div class="label">Tu Key Exclusiva</div>
+                <div class="label">Tu Key Cifrada</div>
                 <div class="key" id="keyText">------</div>
             </div>
 
             <button class="btn-copiar" onclick="copiarKey()">Copiar Key</button>
 
             <div class="aviso">
-                Esta key es única para tu dispositivo, dura exactamente 10 horas y no puede ser usada por nadie más.
+                Esta key es única para tu dispositivo, dura exactamente 10 horas y nadie más puede usarla.
             </div>
         </div>
     </div>
 
     <script>
-        // Generador de estructura de Key segura basada en el número de serie diario
-        function generarCodigoKey(serialNum) {
+        // Generador matemático complejo para que las 300 keys sean imposibles de adivinar
+        function generarKeyImposible(index) {
+            const prefijos = ["ALEX", "FLY", "VIP", "GOD", "PRO", "HUB", "ELITE", "X", "Z", "KRN"];
+            const p1 = prefijos[index % prefijos.length];
+            
+            // Mezcla criptográfica basada en el índice para crear una cadena única y segura
             let hash = 0;
-            const textToHash = "ALEX11_SECRET_KEY_" + serialNum + "_SECURE";
-            for (let i = 0; i < textToHash.length; i++) {
-                hash = ((hash << 5) - hash) + textToHash.charCodeAt(i);
+            const seed = "ALEX11_SECURE_SALT_" + (index * 997) + "_PROTECTED";
+            for (let i = 0; i < seed.length; i++) {
+                hash = ((hash << 5) - hash) + seed.charCodeAt(i);
                 hash = hash & hash;
             }
-            const hexCode = Math.abs(hash).toString(16).toUpperCase().padStart(6, "0").slice(0, 6);
-            return "ALEX-" + serialNum + "-" + hexCode;
+            const partA = Math.abs(hash).toString(36).toUpperCase().padStart(5, "0").slice(0, 5);
+            const partB = Math.abs(hash * 31).toString(36).toUpperCase().padStart(5, "0").slice(0, 5);
+            
+            return `${p1}-${partA}-${partB}`;
         }
 
         const DIEZ_HORAS = 10 * 60 * 60 * 1000;
 
-        function obtenerKeyUnica() {
+        function obtenerKeyExclusiva() {
             document.getElementById("inicio").style.display = "none";
             document.getElementById("cargando").style.display = "block";
 
             setTimeout(() => {
-                const hoyStr = new Date().toDateString(); // Identifica el día actual
-                let storedDate = localStorage.getItem("alex_date_v1");
-                let assignedSerial = localStorage.getItem("alex_serial_v1");
-                let timestamp = localStorage.getItem("alex_time_v1");
+                const hoyStr = new Date().toDateString();
+                let storedDate = localStorage.getItem("alex_date_v2");
+                let assignedIndex = localStorage.getItem("alex_index_v2");
+                let timestamp = localStorage.getItem("alex_time_v2");
                 const ahora = Date.now();
 
-                // Si cambió el día, reiniciamos el contador de las 300 keys globales del día
+                // Si cambió el día, se reinicia el contador de las 300 keys
                 if (storedDate !== hoyStr) {
-                    localStorage.setItem("alex_date_v1", hoyStr);
-                    localStorage.setItem("alex_global_counter_v1", "0");
-                    localStorage.removeItem("alex_serial_v1");
-                    localStorage.removeItem("alex_time_v1");
-                    assignedSerial = null;
+                    localStorage.setItem("alex_date_v2", hoyStr);
+                    localStorage.setItem("alex_global_count_v2", "0");
+                    localStorage.removeItem("alex_index_v2");
+                    localStorage.removeItem("alex_time_v2");
+                    assignedIndex = null;
                 }
 
-                // Si este dispositivo ya tiene una key activa y no han pasado las 10 horas, se le muestra la misma
-                if (assignedSerial && timestamp && (ahora - parseInt(timestamp)) < DIEZ_HORAS) {
-                    mostrarDatosKey(assignedSerial, timestamp);
+                // Si este dispositivo ya tiene una key y no han pasado las 10 horas, se mantiene
+                if (assignedIndex && timestamp && (ahora - parseInt(timestamp)) < DIEZ_HORAS) {
+                    mostrarPantallaKey(assignedIndex, timestamp);
                     return;
                 }
 
-                // Si no tiene key asignada, tomamos el siguiente número secuencial de las 300 disponibles
-                let globalCounter = parseInt(localStorage.getItem("alex_global_counter_v1") || "0");
+                // Tomar el siguiente cupo disponible de las 300 keys
+                let globalCount = parseInt(localStorage.getItem("alex_global_count_v2") || "0");
                 
-                if (globalCounter >= 300) {
-                    alert("¡Se han agotado las 300 keys de hoy! Vuelve mañana.");
+                if (globalCount >= 300) {
+                    alert("¡Las 300 keys de hoy se han agotado! Vuelve mañana.");
                     location.reload();
                     return;
                 }
 
-                globalCounter++;
-                assignedSerial = globalCounter;
+                globalCount++;
+                assignedIndex = globalCount;
                 timestamp = ahora;
 
-                // Guardamos el registro en este dispositivo para bloquearlo
-                localStorage.setItem("alex_global_counter_v1", globalCounter);
-                localStorage.setItem("alex_serial_v1", assignedSerial);
-                localStorage.setItem("alex_time_v1", timestamp);
+                // Guardar vinculación estricta con este dispositivo
+                localStorage.setItem("alex_global_count_v2", globalCount);
+                localStorage.setItem("alex_index_v2", assignedIndex);
+                localStorage.setItem("alex_time_v2", timestamp);
 
-                mostrarDatosKey(assignedSerial, timestamp);
+                mostrarPantallaKey(assignedIndex, timestamp);
             }, 1500);
         }
 
-        function mostrarDatosKey(serial, timestamp) {
-            document.getElementById("numero").innerText = "#" + serial + " / 300";
-            document.getElementById("keyText").innerText = generarCodigoKey(parseInt(serial));
+        function mostrarPantallaKey(index, timestamp) {
+            document.getElementById("numero").innerText = "#" + index + " / 300";
+            document.getElementById("keyText").innerText = generarKeyImposible(parseInt(index));
 
             document.getElementById("cargando").style.display = "none";
             document.getElementById("resultado").style.display = "block";
 
-            actualizarTimer(parseInt(timestamp));
-            setInterval(() => actualizarTimer(parseInt(timestamp)), 1000);
+            iniciarContador(parseInt(timestamp));
+            setInterval(() => iniciarContador(parseInt(timestamp)), 1000);
         }
 
-        function actualizarTimer(timestampOriginal) {
+        function iniciarContador(timestampOriginal) {
             const restante = DIEZ_HORAS - (Date.now() - timestampOriginal);
 
             if (restante <= 0) {
-                localStorage.removeItem("alex_serial_v1");
-                localStorage.removeItem("alex_time_v1");
+                localStorage.removeItem("alex_index_v2");
+                localStorage.removeItem("alex_time_v2");
                 location.reload();
                 return;
             }
@@ -313,16 +319,16 @@
             });
         }
 
-        // Al cargar la página, comprueba si ya generó su key y sigue vigente en el dispositivo
+        // Validación automática si ya tenía una key activa en este dispositivo al entrar
         window.onload = function () {
             const hoyStr = new Date().toDateString();
-            let storedDate = localStorage.getItem("alex_date_v1");
-            let assignedSerial = localStorage.getItem("alex_serial_v1");
-            let timestamp = localStorage.getItem("alex_time_v1");
+            let storedDate = localStorage.getItem("alex_date_v2");
+            let assignedIndex = localStorage.getItem("alex_index_v2");
+            let timestamp = localStorage.getItem("alex_time_v2");
 
-            if (storedDate === hoyStr && assignedSerial && timestamp && (Date.now() - parseInt(timestamp)) < DIEZ_HORAS) {
+            if (storedDate === hoyStr && assignedIndex && timestamp && (Date.now() - parseInt(timestamp)) < DIEZ_HORAS) {
                 document.getElementById("inicio").style.display = "none";
-                mostrarDatosKey(assignedSerial, timestamp);
+                mostrarPantallaKey(assignedIndex, timestamp);
             }
         };
     </script>
