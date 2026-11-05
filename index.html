@@ -5,165 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alex@11 Hub - Key System</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background: #050508;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .card {
-            background: #0c0c12;
-            border: 1px solid #1a1a24;
-            border-radius: 28px;
-            width: 100%;
-            max-width: 380px;
-            padding: 40px 24px 32px;
-            text-align: center;
-        }
-
-        .logo {
-            width: 72px;
-            height: 72px;
-            border: 2px solid #2a8a9a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 22px;
-            font-size: 20px;
-            font-weight: 700;
-            color: #3ecfdf;
-            font-family: Georgia, serif;
-        }
-
-        h1 {
-            font-size: 26px;
-            font-weight: 600;
-            color: #f0f0f5;
-            margin-bottom: 6px;
-            font-family: Georgia, 'Times New Roman', serif;
-        }
-
-        .subtitle {
-            color: #777790;
-            font-size: 13px;
-            margin-bottom: 28px;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: #050508; color: #ffffff; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .card { background: #0c0c12; border: 1px solid #1a1a24; border-radius: 28px; width: 100%; max-width: 380px; padding: 40px 24px 32px; text-align: center; }
+        .logo { width: 72px; height: 72px; border: 2px solid #2a8a9a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; font-size: 20px; font-weight: 700; color: #3ecfdf; font-family: Georgia, serif; }
+        h1 { font-size: 26px; font-weight: 600; color: #f0f0f5; margin-bottom: 6px; font-family: Georgia, serif; }
+        .subtitle { color: #777790; font-size: 13px; margin-bottom: 28px; }
         #inicio { display: block; }
-
-        .btn-generar {
-            background: #3ecfdf;
-            color: #000;
-            border: none;
-            padding: 16px;
-            width: 100%;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-
+        .btn-generar { background: #3ecfdf; color: #000; border: none; padding: 16px; width: 100%; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 10px; }
         .btn-generar:hover { background: #32b0be; }
-
-        #cargando {
-            display: none;
-            padding: 30px 0;
-        }
-
-        .loader {
-            width: 42px;
-            height: 42px;
-            border: 3px solid #1e1e2a;
-            border-top: 3px solid #3ecfdf;
-            border-radius: 50%;
-            margin: 0 auto 18px;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
+        #cargando { display: none; padding: 30px 0; }
+        .loader { width: 42px; height: 42px; border: 3px solid #1e1e2a; border-top: 3px solid #3ecfdf; border-radius: 50%; margin: 0 auto 18px; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         #resultado { display: none; }
-
-        .info-box {
-            background: #111118;
-            border: 1px solid #1e1e2a;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 14px;
-            text-align: left;
-        }
-
-        .info-box .label {
-            font-size: 12px;
-            color: #777790;
-            margin-bottom: 4px;
-        }
-
-        .info-box .value {
-            font-size: 16px;
-            color: #3ecfdf;
-            font-weight: 600;
-        }
-
-        .key-box {
-            background: #111118;
-            border: 1px solid #2a8a9a;
-            border-radius: 16px;
-            padding: 20px 16px;
-            margin-bottom: 18px;
-        }
-
-        .key-box .label {
-            font-size: 12px;
-            color: #777790;
-            margin-bottom: 10px;
-        }
-
-        .key-box .key {
-            font-family: 'Courier New', monospace;
-            font-size: 15px;
-            color: #3ecfdf;
-            font-weight: 700;
-            word-break: break-all;
-            background: #0a0a0f;
-            padding: 12px;
-            border-radius: 10px;
-        }
-
-        .btn-copiar {
-            background: #3ecfdf;
-            color: #000;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .aviso {
-            margin-top: 18px;
-            font-size: 12px;
-            color: #888899;
-            line-height: 1.5;
-        }
+        .info-box { background: #111118; border: 1px solid #1e1e2a; border-radius: 16px; padding: 16px; margin-bottom: 14px; text-align: left; }
+        .info-box .label { font-size: 12px; color: #777790; margin-bottom: 4px; }
+        .info-box .value { font-size: 16px; color: #3ecfdf; font-weight: 600; }
+        .key-box { background: #111118; border: 1px solid #2a8a9a; border-radius: 16px; padding: 20px 16px; margin-bottom: 18px; }
+        .key-box .label { font-size: 12px; color: #777790; margin-bottom: 10px; }
+        .key-box .key { font-family: 'Courier New', monospace; font-size: 15px; color: #3ecfdf; font-weight: 700; word-break: break-all; background: #0a0a0f; padding: 12px; border-radius: 10px; }
+        .btn-copiar { background: #3ecfdf; color: #000; border: none; padding: 15px; width: 100%; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; }
+        .aviso { margin-top: 18px; font-size: 12px; color: #888899; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -173,21 +35,18 @@
         <h1>Alex@11 Hub</h1>
         <div class="subtitle">Sistema de Keys • 300 Exclusivas Diarias</div>
 
-        <!-- PANTALLA INICIO -->
         <div id="inicio">
             <p style="color:#777790; font-size:14px; margin-bottom:24px; line-height:1.5;">
-                Anuncios completados. Toca el botón para reclamar tu key única e irrepetible.
+                Anuncios completados. Toca el botón para reclamar tu key secuencial y única.
             </p>
-            <button class="btn-generar" onclick="obtenerKeyExclusiva()">Obtener mi Key</button>
+            <button class="btn-generar" onclick="obtenerKeyServidor()">Obtener mi Key</button>
         </div>
 
-        <!-- CARGANDO -->
         <div id="cargando">
             <div class="loader"></div>
-            <div style="color:#3ecfdf; font-size:15px;">Conectando con el servidor...</div>
+            <div style="color:#3ecfdf; font-size:15px;">Asignando tu número en orden...</div>
         </div>
 
-        <!-- RESULTADO -->
         <div id="resultado">
             <div class="info-box">
                 <div class="label">Serie del día</div>
@@ -207,7 +66,7 @@
             <button class="btn-copiar" onclick="copiarKey()">Copiar Key</button>
 
             <div class="aviso">
-                Esta key es única para tu dispositivo, dura exactamente 10 horas y nadie más puede usarla.
+                Esta key está vinculada a tu dispositivo al usarla en el script. Si se la pasas a un amigo, no le funcionará.
             </div>
         </div>
     </div>
@@ -215,44 +74,43 @@
     <script>
         const DIEZ_HORAS = 10 * 60 * 60 * 1000;
 
-        function obtenerKeyExclusiva() {
+        function obtenerKeyServidor() {
             document.getElementById("inicio").style.display = "none";
             document.getElementById("cargando").style.display = "block";
 
-            setTimeout(() => {
-                const hoyStr = new Date().toDateString();
-                let storedDate = localStorage.getItem("alex_date_v3");
-                let assignedIndex = localStorage.getItem("alex_index_v3");
-                let timestamp = localStorage.getItem("alex_time_v3");
-                let currentKey = localStorage.getItem("alex_key_string_v3");
-                const ahora = Date.now();
+            // Comprobamos si el navegador ya tiene una key guardada de las últimas 10 horas
+            const hoyStr = new Date().toDateString();
+            let savedKey = localStorage.getItem("alex_key_val");
+            let savedNum = localStorage.getItem("alex_key_num");
+            let savedTime = localStorage.getItem("alex_key_time");
 
-                // Si ya tiene una key activa en este navegador y no han pasado las 10 horas
-                if (storedDate === hoyStr && assignedIndex && timestamp && currentKey && (ahora - parseInt(timestamp)) < DIEZ_HORAS) {
-                    mostrarPantallaKey(assignedIndex, timestamp, currentKey);
-                    return;
-                }
+            if (savedKey && savedNum && savedTime && (Date.now() - parseInt(savedTime)) < DIEZ_HORAS) {
+                setTimeout(() => {
+                    mostrarPantallaKey(savedNum, savedTime, savedKey);
+                }, 800);
+                return;
+            }
 
-                // Generar key segura dentro del límite de 300
-                let randomId = Math.floor(Math.random() * 300) + 1;
-                let prefijos = ["ALEX", "FLY", "VIP", "GOD", "PRO", "HUB", "ELITE", "X", "Z", "KRN"];
-                let p1 = prefijos[randomId % prefijos.length];
-                let nuevaKeyGenerada = `${p1}-KEY-${randomId}-${Math.abs(Math.sin(randomId) * 1000000).toFixed(0)}`;
+            // Pedimos al servidor la SIGUIENTE key en orden estricto (de la 1 a la 300)
+            fetch('http://panelwep.freepage.cc/api.php?action=get_next_key')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        let timestamp = Date.now();
+                        localStorage.setItem("alex_key_val", data.key);
+                        localStorage.setItem("alex_key_num", data.numero);
+                        localStorage.setItem("alex_key_time", timestamp);
 
-                // REGISTRAR AUTOMÁTICAMENTE EN EL SERVIDOR (api.php)
-                fetch(`http://panelwep.freepage.cc/api.php?action=register_key&key=${encodeURIComponent(nuevaKeyGenerada)}`)
-                    .then(response => response.json())
-                    .catch(err => console.log("Registrado localmente"));
-
-                let timestampNuevo = ahora;
-
-                localStorage.setItem("alex_date_v3", hoyStr);
-                localStorage.setItem("alex_index_v3", randomId);
-                localStorage.setItem("alex_time_v3", timestampNuevo);
-                localStorage.setItem("alex_key_string_v3", nuevaKeyGenerada);
-
-                mostrarPantallaKey(randomId, timestampNuevo, nuevaKeyGenerada);
-            }, 1200);
+                        mostrarPantallaKey(data.numero, timestamp, data.key);
+                    } else {
+                        alert(data.message);
+                        location.reload();
+                    }
+                })
+                .catch(err => {
+                    alert("Error al conectar con el servidor de keys.");
+                    location.reload();
+                });
         }
 
         function mostrarPantallaKey(index, timestamp, keyStr) {
@@ -270,9 +128,7 @@
             const restante = DIEZ_HORAS - (Date.now() - timestampOriginal);
 
             if (restante <= 0) {
-                localStorage.removeItem("alex_index_v3");
-                localStorage.removeItem("alex_time_v3");
-                localStorage.removeItem("alex_key_string_v3");
+                localStorage.clear();
                 location.reload();
                 return;
             }
@@ -295,15 +151,13 @@
         }
 
         window.onload = function () {
-            const hoyStr = new Date().toDateString();
-            let storedDate = localStorage.getItem("alex_date_v3");
-            let assignedIndex = localStorage.getItem("alex_index_v3");
-            let timestamp = localStorage.getItem("alex_time_v3");
-            let currentKey = localStorage.getItem("alex_key_string_v3");
+            let savedKey = localStorage.getItem("alex_key_val");
+            let savedNum = localStorage.getItem("alex_key_num");
+            let savedTime = localStorage.getItem("alex_key_time");
 
-            if (storedDate === hoyStr && assignedIndex && timestamp && currentKey && (Date.now() - parseInt(timestamp)) < DIEZ_HORAS) {
+            if (savedKey && savedNum && savedTime && (Date.now() - parseInt(savedTime)) < DIEZ_HORAS) {
                 document.getElementById("inicio").style.display = "none";
-                mostrarPantallaKey(assignedIndex, timestamp, currentKey);
+                mostrarPantallaKey(savedNum, savedTime, savedKey);
             }
         };
     </script>
