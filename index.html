@@ -219,39 +219,37 @@
             document.getElementById("inicio").style.display = "none";
             document.getElementById("cargando").style.display = "block";
 
-            // Simulamos una pequeña carga y pedimos una key libre al servidor
             setTimeout(() => {
                 const hoyStr = new Date().toDateString();
-                let storedDate = localStorage.getItem("alex_date_v2");
-                let assignedIndex = localStorage.getItem("alex_index_v2");
-                let timestamp = localStorage.getItem("alex_time_v2");
-                let currentKey = localStorage.getItem("alex_key_string_v2");
+                let storedDate = localStorage.getItem("alex_date_v3");
+                let assignedIndex = localStorage.getItem("alex_index_v3");
+                let timestamp = localStorage.getItem("alex_time_v3");
+                let currentKey = localStorage.getItem("alex_key_string_v3");
                 const ahora = Date.now();
 
-                // Si ya tiene una key activa en este navegador y no han pasado las 10 horas, se la devolvemos
+                // Si ya tiene una key activa en este navegador y no han pasado las 10 horas
                 if (storedDate === hoyStr && assignedIndex && timestamp && currentKey && (ahora - parseInt(timestamp)) < DIEZ_HORAS) {
                     mostrarPantallaKey(assignedIndex, timestamp, currentKey);
                     return;
                 }
 
-                // Generamos una key segura basada en un número aleatorio del 1 al 300 de forma fija
+                // Generar key segura dentro del límite de 300
                 let randomId = Math.floor(Math.random() * 300) + 1;
                 let prefijos = ["ALEX", "FLY", "VIP", "GOD", "PRO", "HUB", "ELITE", "X", "Z", "KRN"];
                 let p1 = prefijos[randomId % prefijos.length];
                 let nuevaKeyGenerada = `${p1}-KEY-${randomId}-${Math.abs(Math.sin(randomId) * 1000000).toFixed(0)}`;
 
-                // Registramos automáticamente esta key en tu servidor de InfinityFree (api.php)
+                // REGISTRAR AUTOMÁTICAMENTE EN EL SERVIDOR (api.php)
                 fetch(`http://panelwep.freepage.cc/api.php?action=register_key&key=${encodeURIComponent(nuevaKeyGenerada)}`)
                     .then(response => response.json())
                     .catch(err => console.log("Registrado localmente"));
 
                 let timestampNuevo = ahora;
 
-                // Guardamos en el navegador del usuario para que no pierda su key durante las 10 horas
-                localStorage.setItem("alex_date_v2", hoyStr);
-                localStorage.setItem("alex_index_v2", randomId);
-                localStorage.setItem("alex_time_v2", timestampNuevo);
-                localStorage.setItem("alex_key_string_v2", nuevaKeyGenerada);
+                localStorage.setItem("alex_date_v3", hoyStr);
+                localStorage.setItem("alex_index_v3", randomId);
+                localStorage.setItem("alex_time_v3", timestampNuevo);
+                localStorage.setItem("alex_key_string_v3", nuevaKeyGenerada);
 
                 mostrarPantallaKey(randomId, timestampNuevo, nuevaKeyGenerada);
             }, 1200);
@@ -272,9 +270,9 @@
             const restante = DIEZ_HORAS - (Date.now() - timestampOriginal);
 
             if (restante <= 0) {
-                localStorage.removeItem("alex_index_v2");
-                localStorage.removeItem("alex_time_v2");
-                localStorage.removeItem("alex_key_string_v2");
+                localStorage.removeItem("alex_index_v3");
+                localStorage.removeItem("alex_time_v3");
+                localStorage.removeItem("alex_key_string_v3");
                 location.reload();
                 return;
             }
@@ -296,13 +294,12 @@
             });
         }
 
-        // Al cargar la página, comprueba si ya hay una key activa
         window.onload = function () {
             const hoyStr = new Date().toDateString();
-            let storedDate = localStorage.getItem("alex_date_v2");
-            let assignedIndex = localStorage.getItem("alex_index_v2");
-            let timestamp = localStorage.getItem("alex_time_v2");
-            let currentKey = localStorage.getItem("alex_key_string_v2");
+            let storedDate = localStorage.getItem("alex_date_v3");
+            let assignedIndex = localStorage.getItem("alex_index_v3");
+            let timestamp = localStorage.getItem("alex_time_v3");
+            let currentKey = localStorage.getItem("alex_key_string_v3");
 
             if (storedDate === hoyStr && assignedIndex && timestamp && currentKey && (Date.now() - parseInt(timestamp)) < DIEZ_HORAS) {
                 document.getElementById("inicio").style.display = "none";
