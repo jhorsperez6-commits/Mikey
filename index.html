@@ -78,7 +78,6 @@
             document.getElementById("inicio").style.display = "none";
             document.getElementById("cargando").style.display = "block";
 
-            // Comprobamos si el navegador ya tiene una key guardada de las últimas 10 horas
             const hoyStr = new Date().toDateString();
             let savedKey = localStorage.getItem("alex_key_val");
             let savedNum = localStorage.getItem("alex_key_num");
@@ -91,8 +90,8 @@
                 return;
             }
 
-            // Pedimos al servidor la SIGUIENTE key en orden estricto (de la 1 a la 300)
-            fetch('http://panelwep.freepage.cc/api.php?action=get_next_key')
+            // URL SEGURA HTTPS CONFIGURADA CORRECTAMENTE
+            fetch('https://panelwep.freepage.cc/api.php?action=get_next_key')
                 .then(res => res.json())
                 .then(data => {
                     if (data.status === 'success') {
